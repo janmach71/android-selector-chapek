@@ -20,26 +20,29 @@ import java.util.regex.Pattern;
 /**
  * Constants for various stuff used in whole plugin.
  * @author David Vávra (david@inmite.eu)
+ * refactoring to regexp Jan Mach (jan.mach71@gmail.com)
  */
 public class Constants {
-	public static final String NORMAL = "_normal";
-	public static final String FOCUSED = "_focused";
-	public static final String PRESSED = "_pressed";
-	public static final String SELECTED = "_selected";
-	public static final String CHECKED = "_checked";
-	public static final String DISABLED = "_disabled";
-	public static final String HOVERED = "_hovered";
-	public static final String CHECKABLE = "_checkable";
-	public static final String ACTIVATED = "_activated";
-	public static final String WINDOW_FOCUSED = "_windowfocused";
-	public static String[] SUFFIXES = new String[]{NORMAL, PRESSED, FOCUSED, SELECTED, CHECKED, DISABLED, HOVERED, CHECKABLE, ACTIVATED, WINDOW_FOCUSED};
+    public static final Pattern NORMAL = Pattern.compile("(.*?)((_n)(\\.|_))|(_normal)(.*?)");
+    public static final Pattern FOCUSED = Pattern.compile("(.*?)((_f)(\\.|_))|(_focused)(.*?)");
+    public static final Pattern PRESSED = Pattern.compile("(.*?)((_p)(\\.|_))|(_pressed)(.*?)");
+    public static final Pattern SELECTED = Pattern.compile("(.*?)((_s)(\\.|_))|(_selected)(.*?)");
+    public static final Pattern CHECKED = Pattern.compile("(.*?)((_c)(\\.|_))|(_checked)(.*?)");
+    public static final Pattern DISABLED = Pattern.compile("(.*?)((_d)(\\.|_))|(_disabled)(.*?)");
+    public static final Pattern HOVERED = Pattern.compile("(.*?)((_h)(\\.|_))|(_hovered)(.*?)");
+    public static final Pattern CHECKABLE = Pattern.compile("(.*?)((_k)(\\.|_))|(_checkable)(.*?)");
+    public static final Pattern ACTIVATED = Pattern.compile("(.*?)((_a)(\\.|_))|(_activated)(.*?)");
+    public static final Pattern WINDOW_FOCUSED = Pattern.compile("(.*?)((_w)(\\.|_))|(_window_focused)(.*?)");
+
+    public static Pattern[] SUFFIXES = new Pattern[]{NORMAL, PRESSED, FOCUSED, SELECTED, CHECKED, DISABLED, HOVERED, CHECKABLE, ACTIVATED, WINDOW_FOCUSED};
 	public static Pattern VALID_FOLDER_PATTERN = Pattern.compile("^drawable(-[a-zA-Z0-9]+)*$");
 	public static String EXPORT_FOLDER = "drawable";
-	public static HashMap<String, State> sMapping;
+	public static String REPLACE_WITH = "$1$4$6";
+	public static HashMap<Pattern, State> sMapping;
 
 	static {
 		// mapping from file suffixes into android attributes and their default values
-		sMapping = new HashMap<String, State>();
+		sMapping = new HashMap<Pattern, State>();
 		sMapping.put(FOCUSED, new State("state_focused", false));
 		sMapping.put(PRESSED, new State("state_pressed", false));
 		sMapping.put(SELECTED, new State("state_selected", false));

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Generates selectors into XML.
@@ -40,9 +41,9 @@ public class SelectorGenerator {
 		Log.d("generating XML:");
 		Element root = new Element("selector");
 		root.addNamespaceDeclaration(NS, SCHEMA);
-		List<String> allStatesWithoutNormal = new ArrayList<String>();
+		List<Pattern> allStatesWithoutNormal = new ArrayList<Pattern>();
 		for (SelectorDetector.Result result : detectorResults) {
-			for (String state : result.states) {
+			for (Pattern state : result.states) {
 				if (!state.equals(Constants.NORMAL) && !allStatesWithoutNormal.contains(state)) {
 					allStatesWithoutNormal.add(state);
 				}
@@ -54,7 +55,7 @@ public class SelectorGenerator {
 			Attribute attribute = new Attribute("drawable", "@drawable/" + result.drawableName);
 			attribute.setNamespace(NS, SCHEMA);
 			item.addAttribute(attribute);
-			for (String state : allStatesWithoutNormal) {
+			for (Pattern state : allStatesWithoutNormal) {
 				boolean defaultValue = Constants.sMapping.get(state).defaultValue;
 				addState(item, Constants.sMapping.get(state).attributeName, result.states.contains(state)
 						? (!defaultValue) : defaultValue);

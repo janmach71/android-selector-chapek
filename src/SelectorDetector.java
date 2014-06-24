@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Handles detection of selector files from resources and creation of those files.
@@ -42,7 +44,7 @@ public class SelectorDetector {
 		VirtualFile[] children = selectedFolder.getChildren();
 		for (VirtualFile child : children) {
 			Log.d("processing " + child.getName());
-			List<String> suffixes = detectSuffixes(child);
+			List<Pattern> suffixes = detectSuffixes(child);
 			Log.d("suffixes: " + suffixes);
 			if (suffixes.size() > 0) {
 				for (VirtualFile other : children) {
@@ -57,8 +59,8 @@ public class SelectorDetector {
 	}
 
 	private static boolean matches(VirtualFile first, VirtualFile second) {
-		List<String> suffixes1 = detectSuffixes(first);
-		List<String> suffixes2 = detectSuffixes(second);
+		List<Pattern> suffixes1 = detectSuffixes(first);
+		List<Pattern> suffixes2 = detectSuffixes(second);
 		if (suffixes1.size() == 0 || suffixes2.size() == 0 || suffixes1.equals(suffixes2)) {
 			return false;
 		}
@@ -67,14 +69,18 @@ public class SelectorDetector {
 		return firstWithoutSuffix.equals(secondWithoutSuffix);
 	}
 
-	private static String removeSuffixes(String name, List<String> suffixes) {
-		for (String suffix : suffixes) {
-			name = name.replace(suffix, "");
+	private static String removeSuffixes(String name, List<Pattern> suffixes) {
+		for (Pattern suffix : suffixes) {
+            Matcher matcher = suffix.matcher(name);
+            if (matcher.matches()) {
+                name=matcher.replaceFirst(Constants.REPLACE_WITH);
+                break;
+            }
 		}
 		return name;
 	}
 
-	private void createFile(final VirtualFile file, final VirtualFile folder, List<String> fileSuffixes) {
+	private void createFile(final VirtualFile file, final VirtualFile folder, List<Pattern> fileSuffixes) {
 		final String fileName = removeSuffixes(file.getName(), fileSuffixes).replace(".9.png", ".xml").replace(".png",
 				".xml");
 		if (mCreatedFiles.contains(fileName)) {
@@ -107,10 +113,11 @@ public class SelectorDetector {
 		});
 	}
 
-	private static List<String> detectSuffixes(VirtualFile child) {
-		List<String> suffixes = new ArrayList<String>();
-		for (String suffix : Constants.SUFFIXES) {
-			if (child.getName().contains(suffix)) {
+	private static List<Pattern> detectSuffixes(VirtualFile child) {
+		List<Pattern> suffixes = new ArrayList<Pattern>();
+		for (Pattern suffix : Constants.SUFFIXES) {
+            Matcher matcher = suffix.matcher(child.getName());
+            if (matcher.matches()) {
 				suffixes.add(suffix);
 			}
 		}
@@ -133,10 +140,10 @@ public class SelectorDetector {
 	}
 
 	static class Result {
-		public List<String> states;
+		public List<Pattern> states;
 		public String drawableName;
 
-		Result(List<String> states, String drawableName) {
+		Result(List<Pattern> states, String drawableName) {
 			this.states = states;
 			this.drawableName = drawableName;
 		}

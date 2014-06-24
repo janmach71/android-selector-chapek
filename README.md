@@ -25,22 +25,23 @@ This Android Studio plugin automatically generates drawable selectors from appro
  ![](img/selectors_generated.png)
 
 ## Naming convention:
-In order of plugin to work, resources need to be appropriately named. The plugin supports png or nine-patch files with certain suffices anywhere in the file name. You can also combine any suffixes together.
+In order of plugin to work, resources need to be appropriately named. The plugin supports png or nine-patch files with certain suffices anywhere in the file name. You can also combine any infixes together.
+In case of using short single letter naming convention, the letter must be preceded by '_' and followed by '_' or '.'. You can also combine single letter identifiers together.
 
 ### Mapping 
 
-| File name suffix 		| Drawable state 		|
-| --------------------- | --------------------- |  
-| _normal 		   		| (default state)		|
-| _pressed         		| state_pressed			|
-| _focused         		| state_focused			|
-| _disabled        		| state_enabled (false) |
-| _checked		   		| state_checked   		|    
-| _selected		   		| state_selected  		|   
-| _hovered         		| state_hovered   	   	|
-| _checkable	   		| state_checkable 		|   
-| _activated	   		| state_activated 		|   
-| _windowfocused   		| state_window_focused 	|
+| File name infix 	|File name short | Drawable state 		    |
+| ------------------| ---------------| ---------------------    |
+| _normal 		   	| _n_ | _n.      | (default state)          |
+| _pressed         	| _s_ | _s.      | state_pressed			|
+| _focused         	| _f_ | _f.      | state_focused			|
+| _disabled        	| _d_ | _d.      | state_enabled (false)    |
+| _checked		   	| _c_ | _c.      | state_checked   		    |
+| _selected		   	| _s_ | _s.      | state_selected  		    |
+| _hovered         	| _h_ | _h.      | state_hovered   	   	    |
+| _checkable	   	| _k_ | _k.      | state_checkable 		    |
+| _activated	   	| _a_ | _a.      | state_activated 		    |
+| _windowfocused   	| _w_ | _w.      | state_window_focused 	|
 
 
 ## Wishlist
